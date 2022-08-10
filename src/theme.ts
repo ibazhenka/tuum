@@ -8,39 +8,8 @@ import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   components: {
-    /* MuiCssBaseline: {
+    MuiCssBaseline: {
       styleOverrides: `
-        @font-face {
-          font-family: 'Roboto';
-          font-style: 'normal';
-          font-weight: 400;
-          src: local('Roboto'), local('Roboto-Regular'), url(${RobotoRegular}) format('truetype');
-        }
-        @font-face {
-          font-family: 'Roboto';
-          font-style: 'normal';
-          font-weight: 500;
-          src: local('Roboto'), local('Roboto-Medium'), url(${RobotoMedium}) format('truetype');
-        }
-        @font-face {
-          font-family: 'Roboto';
-          font-style: 'normal';
-          font-weight: 700;
-          src: local('Roboto'), local('Roboto-Bold'), url(${RobotoBold}) format('truetype');
-        }
-        @font-face {
-          font-family: 'RobotoMono';
-          font-style: 'normal';
-          font-weight: 400;
-          src: local('Roboto'), local('RobotoMono-Regular'), url(${RobotoMonoRegular}) format('truetype');
-        }
-        @font-face {
-          font-family: 'mrz';
-          font-style: 'normal';
-          font-weight: 400;
-          src: local('OcrB'), local('mrz'), url(${OcrB}) format('opentype');
-        }
-
         scrollbar-width: thin;
         scrollbar-color: light;
 
@@ -50,7 +19,7 @@ export const theme = createTheme({
         }
 
         ::-webkit-scrollbar-track {
-          background: #F9F9F9;
+          background: hsl(190,39%,70%);
         }
 
         ::-webkit-scrollbar-thumb {
@@ -58,7 +27,7 @@ export const theme = createTheme({
           border-radius: 4px;
         }
         `,
-    }, */
+    },
   },
   palette: {
     primary: {
@@ -103,8 +72,8 @@ export const theme = createTheme({
       disabled: 'rgba(0,0,0,0.38)',
     },
     background: {
-      default: 'rgb(167, 208, 216)',
-      paper: 'rgb(167, 208, 216)',
+      default: 'hsl(190,39%,75%)',
+      paper: 'hsl(190,39%,75%)',
     },
   },
 
@@ -154,8 +123,8 @@ export const theme = createTheme({
 
     h3: {
       fontWeight: 400,
-      fontSize: 48,
-      lineHeight: '56px',
+      fontSize: 40,
+      lineHeight: '50px',
     },
 
     h4: {
@@ -196,8 +165,8 @@ export const theme = createTheme({
 
     body2: {
       fontWeight: 400,
-      fontSize: 14,
-      lineHeight: '20px',
+      fontSize: 18,
+      lineHeight: '28px',
     },
 
     button: {

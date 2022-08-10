@@ -1,41 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  Box, Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup, FormHelperText,
-  InputLabel, ListItemText, MenuItem,
-  Select, Stack,
-  TextField,
+  Box,
 } from '@mui/material';
-import countries from 'i18n-iso-countries';
-import english from 'i18n-iso-countries/langs/en.json';
+import { IndustrySelect } from './IndustrySelect';
+import { CountrySelect } from './CountrySelect';
 import { SubmitDialog } from '../SubmitDialog/SubmitDialog';
 import { SubmitButton } from '../elements/submit-button';
 import { theme } from '../theme';
 import { CTextField } from '../elements/text-field';
-import { CLink } from '../elements/link';
-
-const operatingGeographyList = [
-  'National',
-  'Regional',
-  'Global',
-];
-
-const industryList = [
-  'Automotive',
-  'Banking',
-  'Consulting',
-  'Finance',
-  'Healthcare',
-  'Media/PR',
-  'Retail',
-  'Technology',
-  'Telecommunication',
-  'Other'
-];
-
-countries.registerLocale(english);
+import { OperatingGeographySelect } from './OperatingGeographySelect';
+import { CTextarea } from './Textarea';
+import { Consent } from './Consent';
 
 export function Form() {
   const [firstName, setFirstName] = useState<string>('');
@@ -78,24 +53,6 @@ export function Form() {
     setConsent(false);
   };
 
-  const countryList = countries.getNames('en', { select: 'official' });
-  const alfa3List = countries.getAlpha2Codes();
-  const alfa2Arr = Object.keys(countries.getAlpha2Codes());
-  const mapping = alfa2Arr.map((el) => ({
-    alfa2: el,
-    countryName: countryList[el],
-    alfa3: alfa3List[el]
-  }));
-
-  const handleFlagImg = useCallback(
-    (event: React.SyntheticEvent<HTMLImageElement>) => {
-      const target = event.target as HTMLImageElement;
-      if (target.src) {
-        target.src = './flags/unknown.svg';
-      }
-    }, []
-  );
-
   return (
     <Box
       component="form"
@@ -124,7 +81,11 @@ export function Form() {
           helperText={firstNameError ? '*Required' : ' '}
           error={firstNameError}
         />
-        <CTextField onChange={(e) => setLastName(e.target.value)} label="Last name" placeholder="Last name" />
+        <CTextField
+          onChange={(e) => setLastName(e.target.value)}
+          label="Last name"
+          placeholder="Last name"
+        />
         <CTextField
           label="Email"
           placeholder="Email"
@@ -147,119 +108,33 @@ export function Form() {
           helperText={companyNameError ? '*Required' : ' '}
           error={companyNameError}
         />
-        <FormControl
+        <IndustrySelect
+          value={industry}
+          onChange={setIndustry}
+          error={industryError}
+          setError={setIndustryError}
           required
-          variant="standard"
-          sx={{
-            width: 'calc(50% - 12px )',
-            [theme.breakpoints.down(600)]: {
-              width: '100%'
-            },
-          }}
-        >
-          <InputLabel error={industryError}>Industry</InputLabel>
-          <Select
-            defaultValue=""
-            error={industryError}
-            onBlur={() => setIndustryError(!industry)}
-            onChange={(e) => setIndustry(String(e.target.value))}
-          >
-            {industryList.map((el) => <MenuItem key={el} value={el}>{el}</MenuItem>)}
-          </Select>
-          <FormHelperText error>{industryError ? '*Required' : ' '}</FormHelperText>
-        </FormControl>
-        <FormControl
+        />
+        <CountrySelect
+          value={country}
+          onChange={setCountry}
+          setError={setCountryError}
+          error={countryError}
           required
-          variant="standard"
-          sx={{
-            width: 'calc(50% - 12px )',
-            [theme.breakpoints.down(600)]: {
-              width: '100%'
-            },
-          }}
-        >
-          <InputLabel error={countryError}>Country</InputLabel>
-          <Select
-            defaultValue=""
-            error={countryError}
-            onBlur={() => setCountryError(!country)}
-            onChange={(e) => setCountry(String(e.target.value))}
-            label="Country"
-            required
-            sx={{ display: 'flex' }}
-          >
-            <MenuItem value="N/A">N/A</MenuItem>
-            {mapping.map((el) => (
-              <MenuItem key={el.alfa2} value={el.countryName} sx={{ flexWrap: 'nowrap' }}>
-                <Stack direction="row" sx={{ alignItems: 'center', gap: 1, height: '23px' }}>
-                  <img
-                    width={20}
-                    height={20}
-                    src={`/flags/${el.alfa3}.svg`}
-                    alt={el.alfa3}
-                    onError={handleFlagImg}
-                  />
-                  <ListItemText>{el.countryName}</ListItemText>
-                </Stack>
-              </MenuItem>
-            ))}
-          </Select>
-          <FormHelperText error>{countryError ? '*Required' : ' '}</FormHelperText>
-        </FormControl>
-        <FormControl
-          variant="standard"
-          sx={{
-            width: 'calc(50% - 12px )',
-            [theme.breakpoints.down(600)]: {
-              width: '100%'
-            },
-          }}
-        >
-          <InputLabel>Operating geography</InputLabel>
-          <Select onChange={(e) => setOperatingGeography(e.target.value)} label="Operating geography" defaultValue="">
-            {operatingGeographyList.map((el) => <MenuItem key={el} value={el}>{el}</MenuItem>)}
-          </Select>
-        </FormControl>
+        />
+        <OperatingGeographySelect
+          value={operatingGeography}
+          onChange={setOperatingGeography}
+        />
       </Box>
       <Box sx={{ marginTop: 6 }}>
-        <InputLabel sx={{ color: theme.palette.text.primary }}>What would you like to talk about?</InputLabel>
-        <TextField onChange={(e) => setTalkAbout(e.target.value)} fullWidth multiline rows={3} sx={{ marginTop: 0.5 }} />
-        <FormGroup sx={{ marginTop: 4 }}>
-          <FormControlLabel
-            control={(
-              <Checkbox
-                required
-                onChange={(e) => {
-                  setConsent(e.target.checked);
-                  setConsentError(!e.target.checked);
-                }}
-              />
-            )}
-            label={(
-              <>By submitting this form I accept
-                {' '}
-                <CLink
-                  href="https://tuumplatform.com/privacy-policy/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  privacy policy and cookie
-                  policy
-                </CLink>.*
-              </>
-            )}
-          />
-          <FormHelperText error>{consentError ? '*Required' : ' '}</FormHelperText>
-          <FormControlLabel
-            control={(
-              <Checkbox
-                onChange={(e) => setNewsletter(e.target.checked)}
-              />
-            )}
-            label="I would like to receive your newsletter."
-          />
-        </FormGroup>
-
+        <CTextarea onChange={setTalkAbout} />
+        <Consent
+          onChangeConsent={setConsent}
+          error={consentError}
+          onChangeNewsConsent={setNewsletter}
+          setError={setConsentError}
+        />
       </Box>
       <div
         tabIndex={0}

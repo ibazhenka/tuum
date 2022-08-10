@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
-import { CLink } from '../link';
+import { CLink } from '../elements/link';
 
 export function ContactInfo() {
   return (
@@ -14,15 +14,16 @@ export function ContactInfo() {
       }}
     >
       <Stack>
-        <Typography>Media enquiries:</Typography>
+        <Typography variant="body2">Media enquiries:</Typography>
         <CLink
+          variant="body2"
           href="mailto:press@tuumplatform.com"
         >press@tuumplatform.com
         </CLink>
       </Stack>
       <Stack>
-        <Typography>Career questions:</Typography>
-        <CLink href="mailto:careers@tuumplatform.com">careers@tuumplatform.com</CLink>
+        <Typography variant="body2">Career questions:</Typography>
+        <CLink variant="body2" href="mailto:careers@tuumplatform.com">careers@tuumplatform.com</CLink>
       </Stack>
     </Box>
   );

@@ -11,8 +11,8 @@ import {
 import countries from 'i18n-iso-countries';
 import english from 'i18n-iso-countries/langs/en.json';
 import { theme } from '../theme';
-import { CTextField } from '../text-field';
-import { CLink } from '../link';
+import { CTextField } from '../elements/text-field';
+import { CLink } from '../elements/link';
 
 const operatingGeographyList = [
   'National',

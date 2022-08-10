@@ -13,25 +13,39 @@ function App() {
   return (
     <DesignSystemProvider>
       <CssBaseline />
-      <Box sx={{ background: theme.palette.background.default }}>
+      <Box component="main" sx={{ background: theme.palette.background.default }}>
         <Box
           component="section"
           sx={{
             display: 'grid',
             gridTemplateAreas: '"header header header" "aside form form"',
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-            gap: 3,
-            maxWidth: '1216px',
+            gridTemplateColumns: 'minmax(250px, 1fr) repeat(2, minmax(0, 1fr))',
+            gap: '56px 24px',
+            maxWidth: '1200px',
             margin: '0 auto',
-            padding: '0 32px',
+            padding: '80px 32px 64px',
             boxSizing: 'border-box',
+
+            [theme.breakpoints.down(768)]: {
+              gridTemplateAreas: '"header" "aside" "form"',
+              gridTemplateColumns: '1fr',
+              gap: 3,
+            }
           }}
         >
           <Typography
-            sx={{ paddingTop: 10, paddingBottom: 5, gridArea: 'header', gridColumnStart: 2, }}
+            sx={{
+              gridArea: 'header',
+              gridColumnStart: 2,
+              [theme.breakpoints.down(768)]: {
+                gridColumnStart: 1,
+                textAlign: 'center',
+              }
+            }}
             component="h1"
             variant="h3"
-          >Contact us
+          >
+            Contact us
           </Typography>
           <ContactInfo />
           <Form />

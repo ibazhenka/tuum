@@ -6,12 +6,11 @@ import {
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 
-const Transition = forwardRef((
-  props: TransitionProps & {
-    children: React.ReactElement<any, any>;
-  },
-  ref: React.Ref<unknown>,
-) => <Slide direction="right" ref={ref} {...props} />);
+function Slider(props: TransitionProps & { children: React.ReactElement<any, any>},
+  ref: React.Ref<unknown>) {
+  return <Slide direction="right" ref={ref} {...props} />;
+}
+const Transition = forwardRef(Slider);
 
 export function SubmitDialog({ open, handleDialog }) {
   return (

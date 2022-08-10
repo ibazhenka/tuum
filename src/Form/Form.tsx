@@ -45,6 +45,12 @@ export function Form() {
   const [country, setCountry] = useState<string>('');
   const [consent, setConsent] = useState<boolean>(false);
 
+  const [lastName, setLastName] = useState<string>('');
+  const [jobTitle, setJobTitle] = useState<string>('');
+  const [operatingGeography, setOperatingGeography] = useState<string>('');
+  const [talkAbout, setTalkAbout] = useState<string>('');
+  const [newsletter, setNewsletter] = useState<boolean>(false);
+
   const [firstNameError, setFirstNameError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [companyNameError, setCompanyNameError] = useState<boolean>(false);
@@ -75,13 +81,18 @@ export function Form() {
   const countryList = countries.getNames('en', { select: 'official' });
   const alfa3List = countries.getAlpha2Codes();
   const alfa2Arr = Object.keys(countries.getAlpha2Codes());
-  const mapping = alfa2Arr.map((el) => ({ alfa2: el,
-  countryName: countryList[el],
-  alfa3: alfa3List[el] }));
+  const mapping = alfa2Arr.map((el) => ({
+    alfa2: el,
+    countryName: countryList[el],
+    alfa3: alfa3List[el]
+  }));
 
   const handleFlagImg = useCallback(
-    (event) => {
-      event.target.src = './flags/unknown.svg';
+    (event: React.SyntheticEvent<HTMLImageElement>) => {
+      const target = event.target as HTMLImageElement;
+      if (target.src) {
+        target.src = './flags/unknown.svg';
+      }
     }, []
   );
 
@@ -113,7 +124,7 @@ export function Form() {
           helperText={firstNameError ? '*Required' : ' '}
           error={firstNameError}
         />
-        <CTextField label="Last name" placeholder="Last name" />
+        <CTextField onChange={(e) => setLastName(e.target.value)} label="Last name" placeholder="Last name" />
         <CTextField
           label="Email"
           placeholder="Email"
@@ -124,7 +135,7 @@ export function Form() {
           helperText={emailError ? '*Required' : ' '}
           error={emailError}
         />
-        <CTextField label="Job title" placeholder="Job title" />
+        <CTextField onChange={(e) => setJobTitle(e.target.value)} label="Job title" placeholder="Job title" />
       </Box>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '12px 24px', marginTop: 6 }}>
         <CTextField
@@ -140,11 +151,11 @@ export function Form() {
           required
           variant="standard"
           sx={{
-          width: 'calc(50% - 12px )',
-          [theme.breakpoints.down(600)]: {
-            width: '100%'
-          },
-        }}
+            width: 'calc(50% - 12px )',
+            [theme.breakpoints.down(600)]: {
+              width: '100%'
+            },
+          }}
         >
           <InputLabel error={industryError}>Industry</InputLabel>
           <Select
@@ -191,7 +202,7 @@ export function Form() {
                   <ListItemText>{el.countryName}</ListItemText>
                 </Stack>
               </MenuItem>
-))}
+            ))}
           </Select>
           <FormHelperText error>{countryError ? '*Required' : ' '}</FormHelperText>
         </FormControl>
@@ -205,25 +216,25 @@ export function Form() {
           }}
         >
           <InputLabel>Operating geography</InputLabel>
-          <Select label="Operating geography" defaultValue="">
+          <Select onChange={(e) => setOperatingGeography(e.target.value)} label="Operating geography" defaultValue="">
             {operatingGeographyList.map((el) => <MenuItem key={el} value={el}>{el}</MenuItem>)}
           </Select>
         </FormControl>
       </Box>
       <Box sx={{ marginTop: 6 }}>
         <InputLabel sx={{ color: theme.palette.text.primary }}>What would you like to talk about?</InputLabel>
-        <TextField fullWidth multiline rows={3} sx={{ marginTop: 0.5 }} />
+        <TextField onChange={(e) => setTalkAbout(e.target.value)} fullWidth multiline rows={3} sx={{ marginTop: 0.5 }} />
         <FormGroup sx={{ marginTop: 4 }}>
           <FormControlLabel
             control={(
               <Checkbox
                 required
                 onChange={(e) => {
-              setConsent(e.target.checked);
-              setConsentError(!e.target.checked);
-            }}
+                  setConsent(e.target.checked);
+                  setConsentError(!e.target.checked);
+                }}
               />
-)}
+            )}
             label={(
               <>By submitting this form I accept
                 {' '}
@@ -239,7 +250,14 @@ export function Form() {
             )}
           />
           <FormHelperText error>{consentError ? '*Required' : ' '}</FormHelperText>
-          <FormControlLabel control={<Checkbox />} label="I would like to receive your newsletter." />
+          <FormControlLabel
+            control={(
+              <Checkbox
+                onChange={(e) => setNewsletter(e.target.checked)}
+              />
+            )}
+            label="I would like to receive your newsletter."
+          />
         </FormGroup>
 
       </Box>
@@ -252,13 +270,14 @@ export function Form() {
           if (!firstName || !email || !industry || !companyName || !country || !consent) {
             requireCheck();
           }
-      }}
+        }}
       >
         <SubmitButton
           disabled={!firstName || !email || !industry || !companyName || !country || !consent}
           onClick={() => {
-          setOpen(!open);
-        }}
+            setOpen(!open);
+            console.log(firstName, lastName, email, jobTitle, industry, companyName, country, operatingGeography, consent, talkAbout, newsletter);
+          }}
         >
           Submit Form
         </SubmitButton>

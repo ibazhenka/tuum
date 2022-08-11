@@ -18,7 +18,7 @@ export function SubmitButton({ children, ...props }: {children: ReactNode} & But
             marginTop: 4,
             background: 'transparent',
             border: 'none',
-            fontSize: 24,
+            fontSize: '24px',
             lineHeight: '32px',
 
             '&:after': {

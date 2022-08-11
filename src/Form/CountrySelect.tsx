@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ListItemText, MenuItem, Stack } from '@mui/material';
 import countries from 'i18n-iso-countries';
 import english from 'i18n-iso-countries/langs/en.json';
@@ -10,8 +10,33 @@ interface CountrySelectProps {
   value: string
   isValid: boolean
   visibleError: boolean
-  onChange: (data: { value: string, isValid: boolean, visibleError: boolean }) => void
+  onChange: (data: { value: string, isValid: boolean }) => void
   validation: (value: string) => string
+}
+
+function Flag({ alfa3, index }: {alfa3: string, index: number}) {
+  const handleFlagImg = useCallback(
+    (event: React.SyntheticEvent<HTMLImageElement>) => {
+      const target = event.target as HTMLImageElement;
+      if (target.src) {
+        target.src = './flags/unknown.svg';
+      }
+    }, []
+  );
+  const [src, setSrc] = useState(undefined);
+  useEffect(() => {
+    const delay = Math.round(index / 30) * 100;
+    setTimeout(() => setSrc(`/flags/${alfa3}.svg`), delay);
+  }, []);
+  return (
+    <img
+      width={20}
+      height={20}
+      src={src}
+      alt={alfa3}
+      onError={handleFlagImg}
+    />
+  );
 }
 
 export function CountrySelect({
@@ -20,8 +45,8 @@ export function CountrySelect({
     validation,
     onChange,
     value,
-    ...props
   }: CountrySelectProps) {
+  const [finishEditing, setFinishEditing] = useState(false);
   const countryList = countries.getNames('en', { select: 'official' });
   const alfa3List = countries.getAlpha2Codes();
   const alfa2List = Object.keys(countries.getAlpha2Codes());
@@ -31,39 +56,25 @@ export function CountrySelect({
     alfa3: alfa3List[el]
   }));
 
-  const handleFlagImg = useCallback(
-    (event: React.SyntheticEvent<HTMLImageElement>) => {
-      const target = event.target as HTMLImageElement;
-      if (target.src) {
-        target.src = './flags/unknown.svg';
-      }
-    }, []
-  );
-
   return (
     <CSelect
-      {...props}
       value={value}
-      error={!isValid && visibleError}
+      error={!isValid && (visibleError || finishEditing)}
       helperText={visibleError && !isValid ? validation(value) : ' '}
-      label="Country"
-      onChange={(newValue) => onChange({
-        value: newValue,
-        isValid: !validation(newValue),
-        visibleError: true,
-      })}
+      label="Country*"
+      onChange={(newValue) => {
+       onChange({
+          value: newValue,
+          isValid: !validation(newValue),
+        });
+        setFinishEditing(true);
+}}
     >
       <MenuItem value="N/A">N/A</MenuItem>
-      {countryNamesCodes.map((el) => (
+      {countryNamesCodes.map((el, index) => (
         <MenuItem key={el.alfa2} value={el.countryName} sx={{ flexWrap: 'nowrap' }}>
           <Stack direction="row" sx={{ alignItems: 'center', gap: 1, height: '23px' }}>
-            <img
-              width={20}
-              height={20}
-              src={`/flags/${el.alfa3}.svg`}
-              alt={el.alfa3}
-              onError={handleFlagImg}
-            />
+            <Flag alfa3={el.alfa3} index={index} />
             <ListItemText>{el.countryName}</ListItemText>
           </Stack>
         </MenuItem>

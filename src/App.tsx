@@ -20,7 +20,7 @@ function App() {
             display: 'grid',
             gridTemplateAreas: '"header header header" "aside form form"',
             gridTemplateColumns: 'minmax(250px, auto) repeat(2, minmax(0, 1fr))',
-            gap: '56px 24px',
+            gap: `${theme.spacing(7, 3)}`,
             maxWidth: '1200px',
             margin: '0 auto',
             padding: `${theme.spacing(10, 4, 8)}`,

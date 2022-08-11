@@ -10,7 +10,7 @@ import { theme } from '../theme';
 import { OperatingGeographySelect } from './OperatingGeographySelect';
 import { CTextarea } from './Textarea';
 import { Consent } from './Consent';
-import { OptionalTextFiled, RequireTextFiled } from './TextField';
+import { OptionalTextFiled, RequiredTextField } from './TextField';
 
 const requireField = (value: string) => !value ? '*Required' : '';
 const emailValidate = (value: string) => {
@@ -18,7 +18,7 @@ const emailValidate = (value: string) => {
     return '*Required';
   }
   if (!/^(.+)@(.+)$/.test(value)) {
-    return 'Please input email';
+    return 'Please enter a valid email address';
   }
   return '';
 };
@@ -106,10 +106,10 @@ export function Form({ onSubmit }: FormProps) {
       <Box sx={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '12px 24px',
+        gap: `${theme.spacing(1.5, 3)}`,
       }}
       >
-        <RequireTextFiled
+        <RequiredTextField
           label="First name"
           {...firstName}
           visibleError={showAllErrors}
@@ -122,7 +122,7 @@ export function Form({ onSubmit }: FormProps) {
           onChange={setLastName}
         />
 
-        <RequireTextFiled
+        <RequiredTextField
           label="Email"
           {...email}
           visibleError={showAllErrors}
@@ -136,8 +136,8 @@ export function Form({ onSubmit }: FormProps) {
           label="Job title"
         />
       </Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '12px 24px', marginTop: 6 }}>
-        <RequireTextFiled
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: `${theme.spacing(1.5, 3)}`, marginTop: 6 }}>
+        <RequiredTextField
           label="Company name"
           {...companyName}
           visibleError={showAllErrors}

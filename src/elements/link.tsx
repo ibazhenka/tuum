@@ -9,6 +9,7 @@ interface CLinkProps extends LinkProps {
 export function CLink({ children, ...props }: CLinkProps) {
   return (
     <Link
+      component="a"
       sx={{ color: 'inherit',
         textDecoration: 'inherit',
         opacity: 0.6,

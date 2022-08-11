@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CTextField } from '../elements/text-field';
 
-interface RequireTextFieldProps {
+interface RequiredTextFieldProps {
   label: string
   value: string
   isValid: boolean
@@ -9,14 +9,14 @@ interface RequireTextFieldProps {
   onChange: (data: { value: string, isValid: boolean }) => void
   validation: (value: string) => string
 }
-export function RequireTextFiled({
+export function RequiredTextField({
    label,
    value,
    isValid,
    onChange,
    validation,
    visibleError,
-  }: RequireTextFieldProps) {
+  }: RequiredTextFieldProps) {
     const [finishEditing, setFinishEditing] = useState(false);
     const errVisible = visibleError || finishEditing;
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange({

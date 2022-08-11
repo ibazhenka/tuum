@@ -4,7 +4,7 @@
 To get started, checkout this repository:
 
 ```bash
-git clone https://github.com/ibazhenka/tuum <project-name>
+git clone https://github.com/ibazhenka/tuum.git <project-name>
 cd <project-name>
 ```
 

@@ -1,11 +1,5 @@
 import { createTheme } from '@mui/material/styles';
 
-// import RobotoRegular from '~/design-system/fonts/Roboto-Regular.ttf';
-// import RobotoMonoRegular from '~/design-system/fonts/RobotoMono-Regular.ttf';
-// import RobotoMedium from '~/design-system/fonts/Roboto-Medium.ttf';
-// import RobotoBold from '~/design-system/fonts/Roboto-Bold.ttf';
-// import OcrB from '~/design-system/fonts/ocrb.otf';
-
 export const theme = createTheme({
   components: {
     MuiCssBaseline: {
@@ -105,8 +99,6 @@ export const theme = createTheme({
     '0px 8px 16px rgba(0, 0, 0, 0.1), 0px 16px 24px rgba(0, 0, 0, 0.1)',
   ],
   typography: {
-    fontFamily: ['Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'].join(','),
-
     fontSize: 16,
 
     h1: {

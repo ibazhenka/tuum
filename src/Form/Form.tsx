@@ -7,50 +7,87 @@ import { CountrySelect } from './CountrySelect';
 import { SubmitDialog } from '../SubmitDialog/SubmitDialog';
 import { SubmitButton } from '../elements/submit-button';
 import { theme } from '../theme';
-import { CTextField } from '../elements/text-field';
 import { OperatingGeographySelect } from './OperatingGeographySelect';
 import { CTextarea } from './Textarea';
 import { Consent } from './Consent';
+import { OptionalTextFiled, RequireTextFiled } from './TextField';
 
-export function Form() {
-  const [firstName, setFirstName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [companyName, setCompanyName] = useState<string>('');
-  const [industry, setIndustry] = useState<string>('');
-  const [country, setCountry] = useState<string>('');
-  const [consent, setConsent] = useState<boolean>(false);
+const requireField = (value: string) => !value ? '*Required' : '';
+const emailValidate = (value: string) => {
+  if (!value) {
+    return '*Required';
+  }
+  if (!/^(.+)@(.+)$/.test(value)) {
+    return 'Please input email';
+  }
+  return '';
+};
 
-  const [lastName, setLastName] = useState<string>('');
-  const [jobTitle, setJobTitle] = useState<string>('');
-  const [operatingGeography, setOperatingGeography] = useState<string>('');
-  const [talkAbout, setTalkAbout] = useState<string>('');
-  const [newsletter, setNewsletter] = useState<boolean>(false);
+interface FormProps {
+  onSubmit: (formData: {
+    firstName: string,
+    lastName: string,
+    email: string,
+    jobTitle: string,
+    industry: string,
+    companyName: string,
+    country: string,
+    operatingGeography: string,
+    talkAbout: string,
+    consent: boolean,
+    newsletter: boolean
+  })=> Promise<void>
+}
+export function Form({ onSubmit }: FormProps) {
+  const [showAllErrors, setAllErrors] = useState(false);
+  const [firstName, setFirstName] = useState({
+    value: '',
+    isValid: !requireField(''),
+  });
+  const [lastName, setLastName] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [email, setEmail] = useState({
+    value: '',
+    isValid: !emailValidate(''),
+  });
+  const [companyName, setCompanyName] = useState({
+    value: '',
+    isValid: !requireField(''),
+  });
+  const [industry, setIndustry] = useState({
+    value: '',
+    isValid: !requireField(''),
+  });
+  const [country, setCountry] = useState({
+    value: '',
+    isValid: !requireField(''),
+  });
+  const [operatingGeography, setOperatingGeography] = useState('');
+  const [consent, setConsent] = useState(false);
 
-  const [firstNameError, setFirstNameError] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<boolean>(false);
-  const [companyNameError, setCompanyNameError] = useState<boolean>(false);
-  const [industryError, setIndustryError] = useState<boolean>(false);
-  const [countryError, setCountryError] = useState<boolean>(false);
-  const [consentError, setConsentError] = useState<boolean>(false);
-
+  const [talkAbout, setTalkAbout] = useState('');
+  const [newsletter, setNewsletter] = useState(false);
   const [open, setOpen] = React.useState(false);
-
-  const requireCheck = () => {
-    setFirstNameError(!firstName);
-    setEmailError(!email);
-    setCompanyNameError(!companyName);
-    setIndustryError(!industry);
-    setCountryError(!country);
-    setConsentError(!consent);
-  };
-
-  const cleanForm = () => {
-    setFirstName('');
-    setEmail('');
-    setCompanyName('');
-    setIndustry('');
-    setCountry('');
-    setConsent(false);
+  const form = {
+    data: {
+      firstName: firstName.value,
+      lastName,
+      email: email.value,
+      industry: industry.value,
+      companyName: companyName.value,
+      country: country.value,
+      jobTitle,
+      operatingGeography,
+      consent,
+      talkAbout,
+      newsletter
+    },
+    isValid: firstName.isValid
+      && email.isValid
+      && companyName.isValid
+      && industry.isValid
+      && country.isValid
+      && consent
   };
 
   return (
@@ -72,55 +109,52 @@ export function Form() {
         gap: '12px 24px',
       }}
       >
-        <CTextField
+        <RequireTextFiled
           label="First name"
-          placeholder="First name"
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-          onBlur={() => setFirstNameError(!firstName)}
-          helperText={firstNameError ? '*Required' : ' '}
-          error={firstNameError}
+          {...firstName}
+          visibleError={showAllErrors}
+          onChange={setFirstName}
+          validation={requireField}
         />
-        <CTextField
-          onChange={(e) => setLastName(e.target.value)}
+        <OptionalTextFiled
           label="Last name"
-          placeholder="Last name"
+          value={lastName}
+          onChange={setLastName}
         />
-        <CTextField
+
+        <RequireTextFiled
           label="Email"
-          placeholder="Email"
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          onBlur={() => setEmailError(!email)}
-          helperText={emailError ? '*Required' : ' '}
-          error={emailError}
+          {...email}
+          visibleError={showAllErrors}
+          onChange={setEmail}
+          validation={emailValidate}
         />
-        <CTextField onChange={(e) => setJobTitle(e.target.value)} label="Job title" placeholder="Job title" />
+
+        <OptionalTextFiled
+          value={jobTitle}
+          onChange={setJobTitle}
+          label="Job title"
+        />
       </Box>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '12px 24px', marginTop: 6 }}>
-        <CTextField
+        <RequireTextFiled
           label="Company name"
-          onChange={(e) => setCompanyName(e.target.value)}
-          placeholder="Company name"
-          required
-          onBlur={() => setCompanyNameError(!companyName)}
-          helperText={companyNameError ? '*Required' : ' '}
-          error={companyNameError}
+          {...companyName}
+          visibleError={showAllErrors}
+          onChange={setCompanyName}
+          validation={requireField}
         />
         <IndustrySelect
-          value={industry}
+          {...industry}
           onChange={setIndustry}
-          error={industryError}
-          setError={setIndustryError}
-          required
+          visibleError={showAllErrors}
+          validation={requireField}
         />
         <CountrySelect
-          value={country}
+          {...country}
           onChange={setCountry}
-          setError={setCountryError}
-          error={countryError}
-          required
+          visibleError={showAllErrors}
+          validation={requireField}
         />
         <OperatingGeographySelect
           value={operatingGeography}
@@ -128,12 +162,12 @@ export function Form() {
         />
       </Box>
       <Box sx={{ marginTop: 6 }}>
-        <CTextarea onChange={setTalkAbout} />
+        <CTextarea value={talkAbout} onChange={setTalkAbout} />
         <Consent
-          onChangeConsent={setConsent}
-          error={consentError}
+          value={consent}
+          visibleError={showAllErrors}
+          onChange={setConsent}
           onChangeNewsConsent={setNewsletter}
-          setError={setConsentError}
         />
       </Box>
       <div
@@ -142,16 +176,14 @@ export function Form() {
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          if (!firstName || !email || !industry || !companyName || !country || !consent) {
-            requireCheck();
-          }
+          setAllErrors(true);
         }}
       >
         <SubmitButton
-          disabled={!firstName || !email || !industry || !companyName || !country || !consent}
-          onClick={() => {
+          disabled={!form.isValid}
+          onClick={async () => {
+            await onSubmit(form.data);
             setOpen(!open);
-            console.log(firstName, lastName, email, jobTitle, industry, companyName, country, operatingGeography, consent, talkAbout, newsletter);
           }}
         >
           Submit Form
@@ -161,7 +193,6 @@ export function Form() {
         open={open}
         handleDialog={() => {
           setOpen(!open);
-          cleanForm();
         }}
       />
     </Box>

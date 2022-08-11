@@ -10,13 +10,13 @@ export interface CSelectProps {
   value: string,
   onChange: (newValue: string) => void,
   error?: boolean,
-  setError?: (newError: boolean) => void,
+  helperText?: string
   required?: boolean,
   label: string,
   children: ReactNode
 }
 
-export function CSelect({ value, onChange, error, setError, required, label, children }: CSelectProps) {
+export function CSelect({ value, onChange, error, helperText, required, label, children }: CSelectProps) {
   return (
     <FormControl
       required={required}
@@ -30,14 +30,15 @@ export function CSelect({ value, onChange, error, setError, required, label, chi
     >
       <InputLabel error={error}>{label}</InputLabel>
       <Select
+        value={value}
         defaultValue=""
         error={error}
-        onBlur={() => setError(!value)}
+        onBlur={(e) => onChange(String(e.target.value))}
         onChange={(e) => onChange(String(e.target.value))}
       >
         {children}
       </Select>
-      <FormHelperText error>{error ? '*Required' : ' '}</FormHelperText>
+      <FormHelperText error>{helperText}</FormHelperText>
     </FormControl>
   );
 }

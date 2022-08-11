@@ -19,11 +19,11 @@ function App() {
           sx={{
             display: 'grid',
             gridTemplateAreas: '"header header header" "aside form form"',
-            gridTemplateColumns: 'minmax(250px, 1fr) repeat(2, minmax(0, 1fr))',
+            gridTemplateColumns: 'minmax(250px, auto) repeat(2, minmax(0, 1fr))',
             gap: '56px 24px',
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: '80px 32px 64px',
+            padding: `${theme.spacing(10, 4, 8)}`,
             boxSizing: 'border-box',
 
             [theme.breakpoints.down(768)]: {
@@ -48,7 +48,9 @@ function App() {
             Contact us
           </Typography>
           <ContactInfo />
-          <Form />
+          <Form
+            onSubmit={async (d) => console.log(d)}
+          />
         </Box>
       </Box>
     </DesignSystemProvider>

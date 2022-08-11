@@ -5,17 +5,28 @@ import { Checkbox,
 } from '@mui/material';
 import { CLink } from '../elements/link';
 
-export function Consent({ onChangeConsent, setError, error, onChangeNewsConsent }) {
+interface ConsentProps {
+  value: boolean
+  visibleError: boolean
+  onChange: (value: boolean) => void
+  onChangeNewsConsent: (value: boolean) => void
+}
+export function Consent({
+  value,
+  onChange,
+  visibleError,
+  onChangeNewsConsent,
+}: ConsentProps) {
   return (
     <FormGroup sx={{ marginTop: 4 }}>
       <FormControlLabel
         control={(
           <Checkbox
             required
+            checked={value}
             onChange={(e) => {
-              onChangeConsent(e.target.checked);
-              setError(!e.target.checked);
-                }}
+              onChange(e.target.checked);
+            }}
           />
             )}
         label={(
@@ -32,7 +43,7 @@ export function Consent({ onChangeConsent, setError, error, onChangeNewsConsent 
           </>
             )}
       />
-      <FormHelperText error>{error ? '*Required' : ' '}</FormHelperText>
+      <FormHelperText error>{!value && visibleError ? '*Required' : ' '}</FormHelperText>
       <FormControlLabel
         control={(
           <Checkbox

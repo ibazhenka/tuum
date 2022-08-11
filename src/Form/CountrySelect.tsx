@@ -2,11 +2,26 @@ import React, { useCallback } from 'react';
 import { ListItemText, MenuItem, Stack } from '@mui/material';
 import countries from 'i18n-iso-countries';
 import english from 'i18n-iso-countries/langs/en.json';
-import { CSelect, CSelectProps } from '../elements/select';
+import { CSelect } from '../elements/select';
 
 countries.registerLocale(english);
 
-export function CountrySelect(props: Omit<CSelectProps, 'children'|'label'>) {
+interface CountrySelectProps {
+  value: string
+  isValid: boolean
+  visibleError: boolean
+  onChange: (data: { value: string, isValid: boolean, visibleError: boolean }) => void
+  validation: (value: string) => string
+}
+
+export function CountrySelect({
+    visibleError,
+    isValid,
+    validation,
+    onChange,
+    value,
+    ...props
+  }: CountrySelectProps) {
   const countryList = countries.getNames('en', { select: 'official' });
   const alfa3List = countries.getAlpha2Codes();
   const alfa2List = Object.keys(countries.getAlpha2Codes());
@@ -26,7 +41,18 @@ export function CountrySelect(props: Omit<CSelectProps, 'children'|'label'>) {
   );
 
   return (
-    <CSelect {...props} label="Country">
+    <CSelect
+      {...props}
+      value={value}
+      error={!isValid && visibleError}
+      helperText={visibleError && !isValid ? validation(value) : ' '}
+      label="Country"
+      onChange={(newValue) => onChange({
+        value: newValue,
+        isValid: !validation(newValue),
+        visibleError: true,
+      })}
+    >
       <MenuItem value="N/A">N/A</MenuItem>
       {countryNamesCodes.map((el) => (
         <MenuItem key={el.alfa2} value={el.countryName} sx={{ flexWrap: 'nowrap' }}>
